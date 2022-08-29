@@ -26,13 +26,19 @@ class Database:
     def get_users_worker(cls):
         return workers.WorkerUsers(**cls._connect_data)
     
+    @classmethod
+    def get_personal_info_worker(cls):
+        return workers.WorkerPersonalInfo(**cls._connect_data)
+    
     async def create_all(self):
         await workers.WorkerUsers(**self._connect_data).create()
+        await workers.WorkerPersonalInfo(**self._connect_data).create()
         
         self.logger.debug("All tables created")
         
     async def drop_all(self):
         await workers.WorkerUsers(**self._connect_data).drop()
+        await workers.WorkerPersonalInfo(**self._connect_data).drop()
         
         self.logger.debug("All tables droped")
         

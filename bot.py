@@ -7,7 +7,9 @@ from aiogram.contrib.fsm_storage.redis import RedisStorage2
 
 from tgbot.config import load_config
 from tgbot.filters.admin import AdminFilter
-from tgbot.handlers.user import register_user
+from tgbot.handlers.commands import register_commands
+from tgbot.handlers.main_menu import register_main_menu
+from tgbot.handlers.other import register_other
 from tgbot.services.db.database import Database
 from tgbot.middlewares.environment import EnvironmentMiddleware
 
@@ -23,7 +25,9 @@ def register_all_filters(dp):
 
 
 def register_all_handlers(dp):
-    register_user(dp)
+    register_commands(dp)
+    register_main_menu(dp)
+    register_other(dp)
 
 
 async def main():
@@ -35,6 +39,7 @@ async def main():
     config = load_config(".env")
     
     db = Database(config.db.host, config.db.password, config.db.user, config.db.database, config.db.port)
+    # await db.drop_all()
     await db.create_all()
 
     storage = RedisStorage2() if config.tg_bot.use_redis else MemoryStorage()

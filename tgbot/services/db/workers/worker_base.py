@@ -14,7 +14,7 @@ class WorkerBase:
         
         self._logger = logging.getLogger(__name__)
         
-    async def connect(self):
+    async def connect(self) -> None:
         if not self.pool:
             self.pool = await asyncpg.create_pool(database=self._db_name, user=self._user, host=self._host, password=self._password, port=self._port)
         
@@ -42,7 +42,7 @@ class WorkerBase:
             async with conn.transaction():
                 return await conn.fetchrow(*args, **kwargs)
             
-    async def drop(self):
+    async def drop(self) -> None:
         sql = f"DROP TABLE {self._table_name}"
         
         await self.execute(sql)
